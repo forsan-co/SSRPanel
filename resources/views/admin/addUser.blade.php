@@ -26,11 +26,10 @@
                                             </div>
                                         </div>
                                         <div class="portlet-body">
-                                            <div class="form-group has-error">
+                                            <div class="form-group">
                                                 <label for="username" class="col-md-3 control-label">用户名</label>
                                                 <div class="col-md-8">
                                                     <input type="text" class="form-control" name="username" id="username" placeholder="" autofocus required>
-                                                    <input type="hidden" name="_token" value="{{csrf_token()}}">
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -40,23 +39,23 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="usage" class="col-md-3 control-label">用途</label>
+                                                <label class="col-md-3 control-label">用途</label>
                                                 <div class="col-md-8">
-                                                    <div class="mt-radio-inline">
-                                                        <label class="mt-radio">
-                                                            <input type="radio" name="usage" value="1"> 手机
+                                                    <div class="mt-checkbox-inline">
+                                                        <label class="mt-checkbox">
+                                                            <input type="checkbox" name="usage" value="1" checked> 手机
                                                             <span></span>
                                                         </label>
-                                                        <label class="mt-radio">
-                                                            <input type="radio" name="usage" value="2"> 电脑
+                                                        <label class="mt-checkbox">
+                                                            <input type="checkbox" name="usage" value="2"> 电脑
                                                             <span></span>
                                                         </label>
-                                                        <label class="mt-radio">
-                                                            <input type="radio" name="usage" value="3"> 路由器
+                                                        <label class="mt-checkbox">
+                                                            <input type="checkbox" name="usage" value="3"> 路由器
                                                             <span></span>
                                                         </label>
-                                                        <label class="mt-radio">
-                                                            <input type="radio" name="usage" value="4" checked> 其他
+                                                        <label class="mt-checkbox">
+                                                            <input type="checkbox" name="usage" value="4"> 平板
                                                             <span></span>
                                                         </label>
                                                     </div>
@@ -67,7 +66,7 @@
                                                 <div class="col-md-8">
                                                     <div class="mt-radio-inline">
                                                         <label class="mt-radio">
-                                                            <input type="radio" name="pay_way" value="0" checked> 免费
+                                                            <input type="radio" name="pay_way" value="0"> 免费
                                                             <span></span>
                                                         </label>
                                                         <label class="mt-radio">
@@ -75,11 +74,15 @@
                                                             <span></span>
                                                         </label>
                                                         <label class="mt-radio">
-                                                            <input type="radio" name="pay_way" value="2"> 半年付
+                                                            <input type="radio" name="pay_way" value="2"> 季付
                                                             <span></span>
                                                         </label>
                                                         <label class="mt-radio">
-                                                            <input type="radio" name="pay_way" value="3"> 年付
+                                                            <input type="radio" name="pay_way" value="3" checked> 半年付
+                                                            <span></span>
+                                                        </label>
+                                                        <label class="mt-radio">
+                                                            <input type="radio" name="pay_way" value="4"> 年付
                                                             <span></span>
                                                         </label>
                                                     </div>
@@ -108,6 +111,25 @@
                                                     <span class="help-block"> 留空默认为一年 </span>
                                                 </div>
                                             </div>
+                                            <div class="form-group">
+                                                <label for="status" class="col-md-3 control-label">账户状态</label>
+                                                <div class="col-md-8">
+                                                    <div class="mt-radio-inline">
+                                                        <label class="mt-radio">
+                                                            <input type="radio" name="status" value="1" checked> 正常
+                                                            <span></span>
+                                                        </label>
+                                                        <label class="mt-radio">
+                                                            <input type="radio" name="status" value="0"> 未激活
+                                                            <span></span>
+                                                        </label>
+                                                        <label class="mt-radio">
+                                                            <input type="radio" name="status" value="-1"> 禁用
+                                                            <span></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <hr>
                                             <div class="form-group">
                                                 <label for="labels" class="col-md-3 control-label">标签</label>
@@ -123,10 +145,16 @@
                                             <div class="form-group">
                                                 <label for="gender" class="col-md-3 control-label">性别</label>
                                                 <div class="col-md-8">
-                                                    <select class="form-control" name="gender" id="gender">
-                                                        <option value="1" selected>男</option>
-                                                        <option value="0">女</option>
-                                                    </select>
+                                                    <div class="mt-radio-inline">
+                                                        <label class="mt-radio">
+                                                            <input type="radio" name="gender" value="1" checked> 男
+                                                            <span></span>
+                                                        </label>
+                                                        <label class="mt-radio">
+                                                            <input type="radio" name="gender" value="0"> 女
+                                                            <span></span>
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -139,15 +167,6 @@
                                                 <label for="qq" class="col-md-3 control-label">QQ</label>
                                                 <div class="col-md-8">
                                                     <input type="text" class="form-control" name="qq" id="qq" placeholder="">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="is_admin" class="col-md-3 control-label">管理员</label>
-                                                <div class="col-md-8">
-                                                    <select class="form-control" name="is_admin" id="is_admin">
-                                                        <option value="0" selected>否</option>
-                                                        <option value="1">是</option>
-                                                    </select>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -165,14 +184,14 @@
                                     <div class="portlet light bordered">
                                         <div class="portlet-title">
                                             <div class="caption">
-                                                <span class="caption-subject font-dark bold">SSR(R)信息</span>
+                                                <span class="caption-subject font-dark bold">代理信息</span>
                                             </div>
                                         </div>
                                         <div class="portlet-body">
                                             <div class="form-group">
                                                 <label for="port" class="col-md-3 control-label">端口</label>
                                                 <div class="col-md-8">
-                                                    @if($is_rand_port)
+                                                    @if(\App\Components\Helpers::systemConfig()['is_rand_port'])
                                                         <div class="input-group">
                                                             <input class="form-control" type="text" name="port" value="{{$last_port}}" id="port" />
                                                             <span class="input-group-btn">
@@ -195,7 +214,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="form-group has-error">
+                                            <div class="form-group">
                                                 <label for="method" class="col-md-3 control-label">加密方式</label>
                                                 <div class="col-md-8">
                                                     <select class="form-control" name="method" id="method">
@@ -215,16 +234,22 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="enable" class="col-md-3 control-label">状态</label>
+                                                <label for="enable" class="col-md-3 control-label">代理状态</label>
                                                 <div class="col-md-8">
-                                                    <select class="form-control" name="enable" id="enable">
-                                                        <option value="1" selected>启用</option>
-                                                        <option value="0">禁用</option>
-                                                    </select>
+                                                    <div class="mt-radio-inline">
+                                                        <label class="mt-radio">
+                                                            <input type="radio" name="enable" value="1" checked> 启用
+                                                            <span></span>
+                                                        </label>
+                                                        <label class="mt-radio">
+                                                            <input type="radio" name="enable" value="0"> 禁用
+                                                            <span></span>
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <hr>
-                                            <div class="form-group has-error">
+                                            <div class="form-group">
                                                 <label for="protocol" class="col-md-3 control-label">协议</label>
                                                 <div class="col-md-8">
                                                     <select class="form-control" name="protocol" id="protocol">
@@ -234,7 +259,7 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="form-group has-error">
+                                            <div class="form-group">
                                                 <label for="obfs" class="col-md-3 control-label">混淆</label>
                                                 <div class="col-md-8">
                                                     <select class="form-control" name="obfs" id="obfs">
@@ -261,7 +286,7 @@
                                                 <label for="speed_limit_per_con" class="col-md-3 control-label">单连接限速</label>
                                                 <div class="col-md-8">
                                                     <div class="input-group">
-                                                        <input type="text" class="form-control" name="speed_limit_per_con" value="204800" id="speed_limit_per_con" placeholder="" required>
+                                                        <input type="text" class="form-control" name="speed_limit_per_con" value="204800" id="speed_limit_per_con" placeholder="" disabled>
                                                         <span class="input-group-addon">KB</span>
                                                     </div>
                                                 </div>
@@ -270,8 +295,20 @@
                                                 <label for="speed_limit_per_user" class="col-md-3 control-label">单用户限速</label>
                                                 <div class="col-md-8">
                                                     <div class="input-group">
-                                                        <input type="text" class="form-control" name="speed_limit_per_user" value="204800" id="speed_limit_per_user" placeholder="" required>
+                                                        <input type="text" class="form-control" name="speed_limit_per_user" value="204800" id="speed_limit_per_user" placeholder="" disabled>
                                                         <span class="input-group-addon">KB</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="form-group">
+                                                <label for="vmess_id" class="col-md-3 control-label">VMess用户ID</label>
+                                                <div class="col-md-8">
+                                                    <div class="input-group">
+                                                        <input class="form-control" type="text" name="vmess_id" value="{{createGuid()}}" id="vmess_id" />
+                                                        <span class="input-group-btn">
+                                                            <button class="btn btn-success" type="button" onclick="makeVmessId()"> <i class="fa fa-refresh"></i> </button>
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -306,6 +343,7 @@
     <script type="text/javascript">
         // 用户标签选择器
         $('#labels').select2({
+            theme: 'bootstrap',
             placeholder: '设置后则可见相同标签的节点',
             allowClear: true
         });
@@ -325,34 +363,70 @@
             var _token = '{{csrf_token()}}';
             var username = $('#username').val();
             var password = $('#password').val();
-            var usage = $("input:radio[name='usage']:checked").val();
             var pay_way = $("input:radio[name='pay_way']:checked").val();
+            var status = $("input:radio[name='status']:checked").val();
             var labels = $('#labels').val();
             var enable_time = $('#enable_time').val();
             var expire_time = $('#expire_time').val();
-            var gender = $('#gender').val();
+            var gender = $("input:radio[name='gender']:checked").val();
             var wechat = $('#wechat').val();
             var qq = $('#qq').val();
-            var is_admin = $('#is_admin').val();
             var remark = $('#remark').val();
             var level = $("#level option:selected").val();
             var port = $('#port').val();
             var passwd = $('#passwd').val();
             var method = $('#method').val();
             var transfer_enable = $('#transfer_enable').val();
-            var enable = $('#enable').val();
+            var enable = $("input:radio[name='enable']:checked").val();
             var protocol = $('#protocol').val();
             var protocol_param = $('#protocol_param').val();
             var obfs = $('#obfs').val();
             var obfs_param = $('#obfs_param').val();
             var speed_limit_per_con = $('#speed_limit_per_con').val();
             var speed_limit_per_user = $('#speed_limit_per_user').val();
+            var vmess_id = $('#vmess_id').val();
+
+            // 用途
+            var usage = '';
+            $.each($("input:checkbox[name='usage']"), function(){
+                if (this.checked) {
+                    usage += $(this).val() + ',';
+                }
+            });
+            usage = usage.substring(0, usage.length - 1);
 
             $.ajax({
                 type: "POST",
                 url: "{{url('admin/addUser')}}",
                 async: false,
-                data: {_token:_token, username: username, password:password, usage:usage, pay_way:pay_way, labels:labels, enable_time:enable_time, expire_time:expire_time, gender:gender, wechat:wechat, qq:qq, is_admin:is_admin, remark:remark, level:level, port:port, passwd:passwd, method:method, transfer_enable:transfer_enable, enable:enable, protocol:protocol, protocol_param:protocol_param, obfs:obfs, obfs_param:obfs_param, speed_limit_per_con:speed_limit_per_con, speed_limit_per_user:speed_limit_per_user},
+                data: {
+                    _token:_token,
+                    username: username,
+                    password:password,
+                    usage:usage,
+                    pay_way:pay_way,
+                    status:status,
+                    labels:labels,
+                    enable_time:enable_time,
+                    expire_time:expire_time,
+                    gender:gender,
+                    wechat:wechat,
+                    qq:qq,
+                    remark:remark,
+                    level:level,
+                    port:port,
+                    passwd:passwd,
+                    method:method,
+                    transfer_enable:transfer_enable,
+                    enable:enable,
+                    protocol:protocol,
+                    protocol_param:protocol_param,
+                    obfs:obfs,
+                    obfs_param:obfs_param,
+                    speed_limit_per_con:speed_limit_per_con,
+                    speed_limit_per_user:speed_limit_per_user,
+                    vmess_id:vmess_id
+                },
                 dataType: 'json',
                 success: function (ret) {
                     layer.msg(ret.message, {time:1000}, function() {
@@ -373,9 +447,16 @@
             });
         }
 
+        // 生成随机VmessId
+        function makeVmessId() {
+            $.get("{{url('makeVmessId')}}",  function(ret) {
+                $("#vmess_id").val(ret);
+            });
+        }
+
         // 生成随机密码
         function makePasswd() {
-            $.get("{{url('admin/makePasswd')}}",  function(ret) {
+            $.get("{{url('makePasswd')}}",  function(ret) {
                 $("#passwd").val(ret);
             });
         }

@@ -9,6 +9,10 @@ use Illuminate\Database\Eloquent\Model;
  * Class Goods
  *
  * @package App\Http\Models
+ * @property mixed $price
+ * @property-read mixed $traffic_label
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Http\Models\GoodsLabel[] $label
+ * @mixin \Eloquent
  */
 class Goods extends Model
 {
@@ -28,5 +32,12 @@ class Goods extends Model
     function setPriceAttribute($value)
     {
         $this->attributes['price'] = $value * 100;
+    }
+
+    public function getTrafficLabelAttribute()
+    {
+        $traffic_label = flowAutoShow($this->attributes['traffic'] * 1048576);
+
+        return $traffic_label;
     }
 }

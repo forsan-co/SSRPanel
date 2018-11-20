@@ -9,10 +9,11 @@ use Illuminate\Database\Eloquent\Model;
  * Class SsConfig
  *
  * @package App\Http\Models
+ * @mixin \Eloquent
  */
 class SsConfig extends Model
 {
     protected $table = 'ss_config';
     protected $primaryKey = 'id';
-
+    public $timestamps = false;
 }

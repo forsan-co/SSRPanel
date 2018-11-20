@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Components\Helpers;
 use App\Http\Models\SsGroup;
 use App\Http\Models\SsNode;
 use App\Http\Models\User;
@@ -14,17 +15,18 @@ use DB;
 
 /**
  * 订阅控制器
+ *
  * Class SubscribeController
  *
  * @package App\Http\Controllers
  */
 class SubscribeController extends Controller
 {
-    protected static $config;
+    protected static $systemConfig;
 
     function __construct()
     {
-        self::$config = $this->systemConfig();
+        self::$systemConfig = Helpers::systemConfig();
     }
 
     // 获取订阅信息
@@ -36,12 +38,12 @@ class SubscribeController extends Controller
 
         // 校验合法性
         $subscribe = UserSubscribe::query()->with('user')->where('code', $code)->where('status', 1)->first();
-        if (empty($subscribe)) {
+        if (!$subscribe) {
             exit($this->noneNode());
         }
 
         $user = User::query()->where('id', $subscribe->user_id)->whereIn('status', [0, 1])->where('enable', 1)->first();
-        if (empty($user)) {
+        if (!$user) {
             exit($this->noneNode());
         }
 
@@ -49,7 +51,7 @@ class SubscribeController extends Controller
         $subscribe->increment('times', 1);
 
         // 记录每次请求
-        $this->log($subscribe->id, $request->getClientIp(), $request->headers);
+        $this->log($subscribe->id, getClientIp(), $request->headers);
 
         // 获取这个账号可用节点
         $userLabelIds = UserLabel::query()->where('user_id', $user->id)->pluck('label_id');
@@ -57,10 +59,16 @@ class SubscribeController extends Controller
             exit($this->noneNode());
         }
 
-        $nodeList = SsNode::query()->leftjoin("ss_node_label", "ss_node.id", "=", "ss_node_label.node_id")
+        $nodeList = SsNode::query()
+            ->selectRaw('ss_node.*')
+            ->leftjoin("ss_node_label", "ss_node.id", "=", "ss_node_label.node_id")
+            ->where('ss_node.type', 1)
             ->where('ss_node.status', 1)
+            ->where('ss_node.is_subscribe', 1)
             ->whereIn('ss_node_label.label_id', $userLabelIds)
             ->groupBy('ss_node.id')
+            ->orderBy('ss_node.sort', 'desc')
+            ->orderBy('ss_node.id', 'asc')
             ->get()
             ->toArray();
         if (empty($nodeList)) {
@@ -68,13 +76,15 @@ class SubscribeController extends Controller
         }
 
         // 打乱数组
-        shuffle($nodeList);
+        if (self::$systemConfig['subscribe_max']) {
+            shuffle($nodeList);
+        }
 
         // 控制客户端最多获取节点数
         $scheme = '';
         foreach ($nodeList as $key => $node) {
             // 控制显示的节点数
-            if (self::$config['subscribe_max'] && $key >= self::$config['subscribe_max']) {
+            if (self::$systemConfig['subscribe_max'] && $key >= self::$systemConfig['subscribe_max']) {
                 break;
             }
 
@@ -85,8 +95,7 @@ class SubscribeController extends Controller
             $protocol_param = $node['single'] ? $user->port . ':' . $user->passwd : $user->protocol_param;
 
             // 生成ssr scheme
-            $ssr_str = '';
-            $ssr_str .= ($node['server'] ? $node['server'] : $node['ip']) . ':' . ($node['single'] ? $node['single_port'] : $user->port);
+            $ssr_str = ($node['server'] ? $node['server'] : $node['ip']) . ':' . ($node['single'] ? $node['single_port'] : $user->port);
             $ssr_str .= ':' . ($node['single'] ? $node['single_protocol'] : $user->protocol) . ':' . ($node['single'] ? $node['single_method'] : $user->method);
             $ssr_str .= ':' . ($node['single'] ? $node['single_obfs'] : $user->obfs) . ':' . ($node['single'] ? base64url_encode($node['single_passwd']) : base64url_encode($user->passwd));
             $ssr_str .= '/?obfsparam=' . base64url_encode($obfs_param);

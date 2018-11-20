@@ -31,14 +31,16 @@
                                 </tr>
                                 <tr>
                                     <td colspan="2">
-                                        长按下图并点击弹出的“识别图中二维码”进行付款
+                                        扫描下方二维码进行付款（可截图再扫描）
                                         <br>
-                                        请于30分钟内支付，到期未支付订单将自动关闭
+                                        请于15分钟内支付，到期未支付订单将自动关闭
+                                        <br>
+                                        支付后，请稍作等待，账号状态会自动更新
                                     </td>
                                 </tr>
                                 <tr>
                                     <td colspan="2" align="center">
-                                        <img src="{{$payment->qr_code}}"/>
+                                        <img src="{{$payment->qr_local_url}}"/>
                                     </td>
                                 </tr>
                             </table>
@@ -54,9 +56,9 @@
 @section('script')
     <script src="/js/layer/layer.js" type="text/javascript"></script>
     <script type="text/javascript">
-        // 每2秒查询一次订单状态
+        // 每800毫秒查询一次订单状态
         $(document).ready(function(){
-            setInterval("getStatus()", 2000);
+            setInterval("getStatus()", 800);
         });
 
         // 检查支付单状态
@@ -67,8 +69,12 @@
                 console.log(ret);
                 if (ret.status == 'success') {
                     layer.msg(ret.message, {time:1500}, function() {
-                        window.location.href = '{{url('user/orderList')}}';
+                        window.location.href = '{{url('invoices')}}';
                     });
+                } else if(ret.status == 'error') {
+                    layer.msg(ret.message, {time:1500}, function () {
+                        window.location.href = '{{url('invoices')}}';
+                    })
                 }
             });
         }

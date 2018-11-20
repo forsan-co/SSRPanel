@@ -40,8 +40,11 @@
     <div class="page-header-inner ">
         <!-- BEGIN LOGO -->
         <div class="page-logo">
-            <a href="{{url('/user')}}">
-                <img src="/assets/images/logo.png" alt="logo" class="logo-default" /> </a>
+            @if(\App\Components\Helpers::systemConfig()['website_logo'])
+                <a href="{{url('/')}}"><img src="{{\App\Components\Helpers::systemConfig()['website_logo']}}" alt="logo" class="logo-default" style="width:150px; height:30px;"/> </a>
+            @else
+                <a href="{{url('/')}}"><img src="/assets/images/logo.png" alt="logo" class="logo-default" /> </a>
+            @endif
             <div class="menu-toggler sidebar-toggler">
                 <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
             </div>
@@ -60,17 +63,17 @@
                     <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
                     <li class="dropdown dropdown-user dropdown-dark">
                         <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                            <span class="username username-hide-on-mobile"> {{Session::get('user')['username']}} </span>
+                            <span class="username username-hide-on-mobile"> {{Auth::user()->username}} </span>
                             <!-- DOC: Do not remove below empty space(&nbsp;) as its purposely used -->
                             <img alt="" class="img-circle" src="/assets/images/avatar.png" /> </a>
                         <ul class="dropdown-menu dropdown-menu-default">
-                            @if(Session::get('user')['is_admin'])
+                            @if(Auth::user()->is_admin)
                                 <li>
                                     <a href="{{url('admin')}}"> <i class="icon-settings"></i>{{trans('home.console')}}</a>
                                 </li>
                             @endif
                             <li>
-                                <a href="{{url('user/profile')}}"> <i class="icon-user"></i>{{trans('home.profile')}}</a>
+                                <a href="{{url('profile')}}"> <i class="icon-user"></i>{{trans('home.profile')}}</a>
                             </li>
                             <li class="divider"> </li>
                             <li>
@@ -107,51 +110,57 @@
             <!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
             <!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
             <ul class="page-sidebar-menu" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-                <li class="nav-item start {{in_array(Request::path(), ['/', 'user', 'user/subscribe', 'user/profile', 'user/article']) ? 'active open' : ''}}">
-                    <a href="{{url('user')}}" class="nav-link nav-toggle">
+                <li class="nav-item start {{in_array(Request::path(), ['/', 'subscribe', 'profile']) ? 'active open' : ''}}">
+                    <a href="/" class="nav-link nav-toggle">
                         <i class="icon-home"></i>
                         <span class="title">{{trans('home.home')}}</span>
                         <span class="selected"></span>
                     </a>
                 </li>
-                <li class="nav-item {{in_array(Request::path(), ['user/invite']) ? 'active open' : ''}}">
-                    <a href="{{url('user/invite')}}" class="nav-link nav-toggle">
-                        <i class="icon-user-follow"></i>
-                        <span class="title">{{trans('home.invite_code')}}</span>
-                    </a>
-                </li>
-                <li class="nav-item {{in_array(Request::path(), ['user/goodsList', 'user/addOrder']) || Request::segment(1) == 'payment' ? 'active open' : ''}}">
-                    <a href="{{url('user/goodsList')}}" class="nav-link nav-toggle">
+                <li class="nav-item {{in_array(Request::path(), ['services']) || in_array(Request::segment(1), ['buy', 'payment']) ? 'active open' : ''}}">
+                    <a href="{{url('services')}}" class="nav-link nav-toggle">
                         <i class="icon-basket"></i>
                         <span class="title">{{trans('home.services')}}</span>
                     </a>
                 </li>
-                <li class="nav-item {{in_array(Request::path(), ['user/orderList']) ? 'active open' : ''}}">
-                    <a href="{{url('user/orderList')}}" class="nav-link nav-toggle">
+                <li class="nav-item {{in_array(Request::path(), ['invoices']) || Request::segment(1) == 'invoice' ? 'active open' : ''}}">
+                    <a href="{{url('invoices')}}" class="nav-link nav-toggle">
                         <i class="icon-wallet"></i>
                         <span class="title">{{trans('home.invoices')}}</span>
                     </a>
                 </li>
-                <li class="nav-item {{in_array(Request::path(), ['user/ticketList', 'user/replyTicket']) ? 'active open' : ''}}">
-                    <a href="{{url('user/ticketList')}}" class="nav-link nav-toggle">
+                <li class="nav-item {{in_array(Request::path(), ['tickets', 'replyTicket']) ? 'active open' : ''}}">
+                    <a href="{{url('tickets')}}" class="nav-link nav-toggle">
                         <i class="icon-question"></i>
                         <span class="title">{{trans('home.tickets')}}</span>
                     </a>
                 </li>
-                <li class="nav-item {{in_array(Request::path(), ['user/trafficLog']) ? 'active open' : ''}}">
-                    <a href="{{url('user/trafficLog')}}" class="nav-link nav-toggle">
+                <li class="nav-item {{in_array(Request::path(), ['invite']) ? 'active open' : ''}}">
+                    <a href="{{url('invite')}}" class="nav-link nav-toggle">
+                        <i class="icon-user-follow"></i>
+                        <span class="title">{{trans('home.invite_code')}}</span>
+                    </a>
+                </li>
+                <li class="nav-item {{in_array(Request::path(), ['trafficLog']) ? 'active open' : ''}}">
+                    <a href="{{url('trafficLog')}}" class="nav-link nav-toggle">
                         <i class="icon-speedometer"></i>
                         <span class="title">{{trans('home.traffic_log')}}</span>
                     </a>
                 </li>
                 @if(Session::get('referral_status'))
-                <li class="nav-item {{in_array(Request::path(), ['user/referral']) ? 'active open' : ''}}">
-                    <a href="{{url('user/referral')}}" class="nav-link nav-toggle">
+                <li class="nav-item {{in_array(Request::path(), ['referral']) ? 'active open' : ''}}">
+                    <a href="{{url('referral')}}" class="nav-link nav-toggle">
                         <i class="icon-diamond"></i>
                         <span class="title">{{trans('home.referrals')}}</span>
                     </a>
                 </li>
                 @endif
+                <li class="nav-item {{in_array(Request::path(), ['help', 'article']) ? 'active open' : ''}}">
+                    <a href="{{url('help')}}" class="nav-link nav-toggle">
+                        <i class="icon-doc"></i>
+                        <span class="title">{{trans('home.help')}}</span>
+                    </a>
+                </li>
             </ul>
             <!-- END SIDEBAR MENU -->
         </div>
@@ -165,7 +174,7 @@
     @if(Session::get("admin"))
         <div class="portlet light bordered" style="position:fixed;right:20px;bottom:0px;width:270px;">
             <div class="portlet-body text-right">
-                <h5>当前身份：{{Session::get("user")['username']}}</h5>
+                <h5>当前身份：{{Auth::user()->username}}</h5>
                 <button class="btn btn-sm btn-danger" id="return_to_admin"> 返回管理页面 </button>
             </div>
         </div>
@@ -175,7 +184,7 @@
 <!-- END CONTAINER -->
 <!-- BEGIN FOOTER -->
 <div class="page-footer">
-    <div class="page-footer-inner"> 2017 - 2018 &copy; <a href="https://github.com/ssrpanel/ssrpanel" target="_blank">SSRPanel</a> </div>
+    <div class="page-footer-inner"> &copy; 2017 - 2019 <a href="https://github.com/ssrpanel/ssrpanel" target="_blank">SSRPanel</a> {{config('version.name')}} </div>
     <div class="scroll-to-top">
         <i class="icon-arrow-up"></i>
     </div>
@@ -202,7 +211,7 @@
     <script type="text/javascript">
         $("#return_to_admin").click(function () {
             $.ajax({
-                'url': "{{url("/user/switchToAdmin")}}",
+                'url': "{{url("switchToAdmin")}}",
                 'data': {
                     '_token': "{{csrf_token()}}"
                 },
@@ -229,10 +238,21 @@
 <!-- BEGIN THEME LAYOUT SCRIPTS -->
 <script src="/assets/layouts/layout4/scripts/layout.min.js" type="text/javascript"></script>
 <!-- END THEME LAYOUT SCRIPTS -->
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122312249-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-122312249-1');
+</script>
+
 <!-- 统计 -->
-{!! $website_analytics !!}
+{!! \App\Components\Helpers::systemConfig()['website_analytics'] !!}
 <!-- 客服 -->
-{!! $website_customer_service !!}
+{!! \App\Components\Helpers::systemConfig()['website_customer_service'] !!}
 </body>
 
 </html>

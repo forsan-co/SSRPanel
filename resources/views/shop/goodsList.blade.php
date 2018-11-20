@@ -40,6 +40,9 @@
                                     <th> 内含流量 </th>
                                     <th> 售价 </th>
                                     <!-- <th> 所需积分 </th> -->
+                                    <th> 排序 </th>
+                                    <th> 热销 </th>
+                                    <th> 限购 </th>
                                     <th> 状态 </th>
                                     <th style="text-align: center;"> 操作 </th>
                                 </tr>
@@ -54,11 +57,34 @@
                                         <tr class="odd gradeX">
                                             <td> {{$goods->id}} </td>
                                             <td> {{$goods->name}} </td>
-                                            <td> {{$goods->type == 1 ? '流量包' : '套餐'}} </td>
+                                            <td>
+                                                @if($goods->type == 1)
+                                                    流量包
+                                                @elseif($goods->type == 2)
+                                                    套餐
+                                                @else
+                                                    充值
+                                                @endif
+                                            </td>
                                             <!-- <td> @if($goods->logo) <a href="{{$goods->logo}}" class="fancybox"><img src="{{$goods->logo}}"/></a> @endif </td> -->
-                                            <td> {{$goods->traffic}} </td>
+                                            <td> {{$goods->type == 3 ? '' : $goods->traffic_label}} </td>
                                             <td> {{$goods->price}}元 </td>
                                             <!-- <td> {{$goods->score}} </td> -->
+                                            <td> {{$goods->sort}} </td>
+                                            <td>
+                                                @if($goods->is_hot)
+                                                    <span class="label label-danger">是</span>
+                                                @else
+                                                    <span class="label label-default">否</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($goods->is_limit)
+                                                    <span class="label label-danger">是</span>
+                                                @else
+                                                    <span class="label label-default">否</span>
+                                                @endif
+                                            </td>
                                             <td>
                                                 @if($goods->status)
                                                     <span class="label label-success">上架</span>
@@ -130,6 +156,6 @@
                 openEffect: 'elastic',
                 closeEffect: 'elastic'
             })
-        })
+        });
     </script>
 @endsection

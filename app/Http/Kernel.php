@@ -38,7 +38,7 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            'throttle:60,1',
+            'throttle:200,1', // API请求限制：1分钟内同一个IP限制只能请求200次
             'bindings',
         ],
     ];
@@ -57,8 +57,10 @@ class Kernel extends HttpKernel
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'admin' => \App\Http\Middleware\Admin::class,
-        'user' => \App\Http\Middleware\User::class,
-        'forbidden' => \App\Http\Middleware\Forbidden::class
+        'isAdmin' => \App\Http\Middleware\isAdmin::class,
+        'isLogin' => \App\Http\Middleware\isLogin::class,
+        'isForbidden' => \App\Http\Middleware\isForbidden::class,
+        'affiliate' => \App\Http\Middleware\Affiliate::class,
+
     ];
 }

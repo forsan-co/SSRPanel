@@ -12,9 +12,9 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="note note-info">
-                    <p>如果负载显示宕机，可能是节点宕机或者节点上的SSR(R)服务挂掉了，请重启节点或者SSR(R)服务。</p>
-                    <p>节点宕机是因为所在IDC机房出了问题或者母机超售过载导致，SSR(R)挂掉是因为节点的配置太渣。<a href="https://github.com/ssrpanel/ssrpanel/wiki/VPS%E6%8E%A8%E8%8D%90&%E8%B4%AD%E4%B9%B0%E7%BB%8F%E9%AA%8C" target="_blank" style="color:red;">[VPS推荐]</a></p>
-                    <p>如果还是无法解决，请检查各节点服务器的时间是否同步。<a href="https://github.com/ssrpanel/SSRPanel/wiki/%E5%8D%95%E7%AB%AF%E5%8F%A3%E5%A4%9A%E7%94%A8%E6%88%B7%E7%9A%84%E5%9D%91" target="_blank" style="color:red;">[时间校准]</a></p>
+                    <p>节点绑定域名推荐使用<a href="https://www.namesilo.com/?rid=326ec20pa" target="_blank">Namesilo</a>，本面板支持自动更新DNS <a href="https://github.com/ssrpanel/SSRPanel/wiki/%E8%B4%AD%E4%B9%B0%E5%9F%9F%E5%90%8D%EF%BC%88%E8%87%AA%E5%B8%A6%E9%9A%90%E7%A7%81%E4%BF%9D%E6%8A%A4%EF%BC%89" target="_blank" style="color:red;">[购买域名]</a></p>
+                    <p>状态显示为'宕机'：1.SSR(R)进程挂掉；2.服务器真的宕机。<a href="https://github.com/ssrpanel/ssrpanel/wiki/VPS%E6%8E%A8%E8%8D%90&%E8%B4%AD%E4%B9%B0%E7%BB%8F%E9%AA%8C" target="_blank" style="color:red;">[VPS推荐]</a></p>
+                    <p>请务必检查各节点服务器的时间是否同步。<a href="https://github.com/ssrpanel/SSRPanel/wiki/%E5%8D%95%E7%AB%AF%E5%8F%A3%E5%A4%9A%E7%94%A8%E6%88%B7%E7%9A%84%E5%9D%91" target="_blank" style="color:red;">[时间校准]</a></p>
                 </div>
             </div>
         </div>
@@ -38,10 +38,11 @@
                                 <thead>
                                 <tr>
                                     <th> <span class="node-id"><a href="javascript:showIdTips();">ID</a></span> </th>
-                                    <th> 节点名称 </th>
-                                    <th> 域名 </th>
+                                    <th> 类型 </th>
+                                    <th> 名称 </th>
                                     <th> IP </th>
-                                    <th> 负载 </th>
+                                    <th> 绑定域名 </th>
+                                    <th> 状态 </th>
                                     <th> 在线 </th>
                                     <th> <span class="node-flow"><a href="javascript:showFlowTips();">产生流量</a></span> </th>
                                     <th> 流量比例 </th>
@@ -52,28 +53,24 @@
                                 <tbody>
                                     @if($nodeList->isEmpty())
                                         <tr>
-                                            <td colspan="10" style="text-align: center;">暂无数据</td>
+                                            <td colspan="11" style="text-align: center;">暂无数据</td>
                                         </tr>
                                     @else
                                         @foreach($nodeList as $node)
                                             <tr class="odd gradeX">
                                                 <td> {{$node->id}} </td>
-                                                <td>
-                                                    @if(!$node->status)
-                                                        <span class="label label-warning" title="维护中">{{$node->name}}</span>
-                                                    @else
-                                                        {{$node->name}}
-                                                    @endif
-                                                </td>
-                                                <td> <span class="label label-danger">{{$node->server}}</span> </td>
-                                                <td> <span class="label label-danger">{{$node->ip}}</span> </td>
-                                                <td> <span class="label label-danger">{{$node->load}}</span> </td>
-                                                <td> <span class="label label-danger">{{$node->online_users}}</span> </td>
+                                                <td> {{$node->type == 2 ? 'V2Ray' : 'Shadowsocks(R)'}} </td>
+                                                <td> {{$node->name}} </td>
+                                                <td> <span class="label {{$node->status ? 'label-danger' : 'label-default'}}">{{$node->ip}}</span> </td>
+                                                <td> <span class="label {{$node->status ? 'label-danger' : 'label-default'}}">{{$node->server}}</span> </td>
+                                                <td> <span class="label {{$node->status ? 'label-danger' : 'label-default'}}">{{$node->load}}</span> </td>
+                                                <td> <span class="label {{$node->status ? 'label-danger' : 'label-default'}}">{{$node->online_users}}</span> </td>
                                                 <td> {{$node->transfer}} </td>
-                                                <td> <span class="label label-danger">{{$node->traffic_rate}}</span> </td>
+                                                <td> <span class="label {{$node->status ? 'label-danger' : 'label-default'}}">{{$node->traffic_rate}}</span> </td>
                                                 <td>
                                                     @if($node->compatible) <span class="label label-info">兼</span> @endif
-                                                    @if($node->single) <span class="label label-danger">单</span> @endif
+                                                    @if($node->single) <span class="label label-info">单</span> @endif
+                                                    @if(!$node->is_subscribe) <span class="label label-info"><s>订</s></span> @endif
                                                 </td>
                                                 <td>
                                                     <button type="button" class="btn btn-sm blue btn-outline" onclick="editNode('{{$node->id}}')">

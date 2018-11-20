@@ -51,6 +51,10 @@
                                                 <input type="radio" name="type" value="2" @if($goods->type == 2) checked @endif disabled> 套餐
                                                 <span></span>
                                             </label>
+                                            <label class="mt-radio">
+                                                <input type="radio" name="type" value="3" @if($goods->type == 3) checked @endif disabled> 充值
+                                                <span></span>
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
@@ -102,6 +106,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                @if($goods->type <= 2)
                                 <div class="form-group">
                                     <label class="control-label col-md-3">内含流量</label>
                                     <div class="col-md-6">
@@ -141,6 +146,57 @@
                                         <span class="help-block"> 到期后会自动从总流量扣减对应的流量 </span>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label for="sort" class="col-md-3 control-label">排序</label>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" name="sort" value="{{$goods->sort}}" id="sort" placeholder="">
+                                        <span class="help-block"> 值越大排越前 </span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="color" class="col-md-3 control-label">颜色</label>
+                                    <div class="col-md-6">
+                                        <select class="form-control" name="color" id="color">
+                                            <option value="green" @if($goods->color == 'green') selected @endif>green</option>
+                                            <option value="blue" @if($goods->color == 'blue') selected @endif>blue</option>
+                                            <option value="red" @if($goods->color == 'red') selected @endif>red</option>
+                                            <option value="purple" @if($goods->color == 'purple') selected @endif>purple</option>
+                                            <option value="white" @if($goods->color == 'white') selected @endif>white</option>
+                                            <option value="grey" @if($goods->color == 'grey') selected @endif>grey</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="is_hot" class="col-md-3 control-label">热销</label>
+                                    <div class="col-md-6">
+                                        <div class="mt-radio-inline">
+                                            <label class="mt-radio">
+                                                <input type="radio" name="is_hot" value="1" @if($goods->is_hot == 1) checked @endif> 是
+                                                <span></span>
+                                            </label>
+                                            <label class="mt-radio">
+                                                <input type="radio" name="is_hot" value="0" @if($goods->is_hot == 0) checked @endif> 否
+                                                <span></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="is_limit" class="col-md-3 control-label">限购</label>
+                                    <div class="col-md-6">
+                                        <div class="mt-radio-inline">
+                                            <label class="mt-radio">
+                                                <input type="radio" name="is_limit" value="1" @if($goods->is_limit == 1) checked @endif> 是
+                                                <span></span>
+                                            </label>
+                                            <label class="mt-radio">
+                                                <input type="radio" name="is_limit" value="0" @if($goods->is_limit == 0) checked @endif> 否
+                                                <span></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
                                 <div class="form-group last">
                                     <label class="control-label col-md-3">状态</label>
                                     <div class="col-md-6">
@@ -156,7 +212,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                             <div class="form-actions">
                                 <div class="row">
@@ -184,8 +239,10 @@
     <script type="text/javascript">
         // 用户标签选择器
         $('#labels').select2({
+            theme: 'bootstrap',
             placeholder: '设置后当用户购买此商品则可见相同标签的节点',
-            allowClear: true
+            allowClear: true,
+            width:'100%'
         });
 
         // 有效期
